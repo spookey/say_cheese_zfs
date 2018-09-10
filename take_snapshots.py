@@ -1,6 +1,7 @@
 #!/usr/bin/env python2
 
 from argparse import ArgumentParser
+from shlex import split
 from subprocess import CalledProcessError, check_call, check_output
 from sys import exit as _exit
 
@@ -10,14 +11,14 @@ from shared import message, time_stamp
 def pool_names():
     cmd = 'zfs list -H -o name'
     try:
-        proc = check_output(cmd.split())
+        proc = check_output(split(cmd))
         return proc.splitlines()
     except (CalledProcessError, OSError) as ex:
         message([cmd, str(ex)], info=False, critical=True)
 
 
 def pool_snapshot(pool, name, silent=False, dry=False):
-    cmd = 'zfs snapshot -r "{}@{}"'.format(pool, name)
+    cmd = 'zfs snapshot "{}@{}"'.format(pool, name)
     if dry:
         silent = False
     if not silent:
@@ -25,7 +26,7 @@ def pool_snapshot(pool, name, silent=False, dry=False):
     if dry:
         return True
     try:
-        check_call(cmd.split())
+        check_call(split(cmd))
         return True
     except (CalledProcessError, OSError) as ex:
         message([cmd, str(ex)], info=False)
@@ -54,12 +55,13 @@ def arg_parser():
     parser.add_argument(
         'name',
         action='store',
-        help=''
+        help='name of snapshot'
+        '(will be suffixed with current date if not exact)'
     )
     parser.add_argument(
         'pools',
         action='store', nargs='*',
-        help=''
+        help='name of pools'
     )
 
     return parser

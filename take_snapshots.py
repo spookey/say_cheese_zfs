@@ -17,12 +17,9 @@ def pool_names():
         message([cmd, str(ex)], info=False, critical=True)
 
 
-def pool_snapshot(pool, name, silent=False, dry=False):
+def pool_snapshot(pool, name, dry=False):
     cmd = 'zfs snapshot "{}@{}"'.format(pool, name)
-    if dry:
-        silent = False
-    if not silent:
-        message(cmd)
+    message(cmd)
     if dry:
         return True
     try:
@@ -45,11 +42,6 @@ def arg_parser():
         '-d', '--dry',
         action='store_true', default=False,
         help='dry run - just print what would be done'
-    )
-    parser.add_argument(
-        '-s', '--silent',
-        action='store_true', default=False,
-        help='silent run - do not print anything, only on error or dry run'
     )
 
     parser.add_argument(
@@ -88,7 +80,7 @@ def main():
     res = []
     for pool in args.pools:
         res.append(
-            pool_snapshot(pool, args.name, silent=args.silent, dry=args.dry)
+            pool_snapshot(pool, args.name, dry=args.dry)
         )
 
     return all(res)

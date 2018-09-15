@@ -7,8 +7,6 @@ Automatically take and/or purge ZFS snapshots.
 Synopsis
 --------
 
-Beware: *work in progress*
-
 This code is intended to be run inside the crontab.
 
 It should work both in python 2 and python 3.
@@ -43,7 +41,11 @@ Purge
 
 Purge snapshots.
 
-tbd;
+Please see ``./purge_snapshots.py --help`` for usage::
+
+    ./purge_snapshots.py  [-h] [-d] [-p PREFIX]
+                          time
+                          {S,sec,M,min,H,hour,d,day,w,week,m,month,y,year}
 
 
 Appendix

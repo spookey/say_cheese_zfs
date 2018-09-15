@@ -26,3 +26,13 @@ def time_string(stamp=None):
     if stamp is None:
         stamp = datetime.utcnow()
     return stamp.strftime(SNAP_FORMAT)
+
+
+def time_parse(number=0):
+    return datetime.utcfromtimestamp(int(number))
+
+
+def time_span(stamp=None):
+    if stamp is None:
+        stamp = datetime.utcnow()
+    return int((stamp - time_parse()).total_seconds())

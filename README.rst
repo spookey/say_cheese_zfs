@@ -3,6 +3,7 @@ Say cheese
 
 Automatically take and/or purge ZFS snapshots.
 
+
 Synopsis
 --------
 
@@ -13,6 +14,7 @@ This code is intended to be run inside the crontab.
 It should work both in python 2 and python 3.
 (If it does not, or on other errors, please feel free to open an issue.)
 
+
 Installation
 ^^^^^^^^^^^^
 
@@ -22,18 +24,22 @@ Installation
 * Then symlink both scripts (as root) into a folder inside of ``$PATH``.
 
 
+Scripts
+-------
+
+
 Take
-~~~~
+^^^^
 
 Take snapshots.
 
 Please see ``./take_snapshots.py --help`` for usage::
 
-    ./take_snapshots.py [-h] [-x] [-d] [-s] name [pools [pools ...]]
+    ./take_snapshots.py [-h] [-x] [-d] name [pools [pools ...]]
 
 
 Purge
-~~~~~
+^^^^^
 
 Purge snapshots.
 
@@ -41,7 +47,7 @@ tbd;
 
 
 Appendix
-^^^^^^^^
+--------
 
 This project is loosely related to
 `zfs-snapshot-all <ztake_>`_

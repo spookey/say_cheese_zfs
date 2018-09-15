@@ -5,13 +5,13 @@ from shlex import split
 from subprocess import CalledProcessError, check_call, check_output
 from sys import exit as _exit
 
-from shared import message, time_stamp
+from shared import message, time_string
 
 
 def pool_names():
     cmd = 'zfs list -H -o name'
     try:
-        proc = check_output(split(cmd))
+        proc = check_output(split(cmd), universal_newlines=True)
         return proc.splitlines()
     except (CalledProcessError, OSError) as ex:
         message([cmd, str(ex)], info=False, critical=True)
@@ -19,15 +19,16 @@ def pool_names():
 
 def pool_snapshot(pool, name, dry=False):
     cmd = 'zfs snapshot "{}@{}"'.format(pool, name)
-    message(cmd)
+    message(cmd, info=True, critical=False)
     if dry:
         return True
+
     try:
         check_call(split(cmd))
         return True
     except (CalledProcessError, OSError) as ex:
         message([cmd, str(ex)], info=False)
-        return False
+    return False
 
 
 def arg_parser():
@@ -71,7 +72,7 @@ def arguments():
         args.pools = pools
 
     if not args.exact:
-        args.name = '{}_{}'.format(args.name, time_stamp())
+        args.name = '{}_{}'.format(args.name, time_string())
     return args
 
 

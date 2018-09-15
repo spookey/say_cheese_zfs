@@ -4,7 +4,7 @@ from sys import exit as _exit
 
 from compat import is_iterable
 
-SNAP_FORMAT = '%Y-%m-%d-%H-%M-%S'
+SNAP_FORMAT = '%Y-%m-%d_%H-%M-%S'
 
 
 def message(entries, info=True, critical=False):
@@ -22,5 +22,7 @@ def message(entries, info=True, critical=False):
         _exit(1)
 
 
-def time_stamp():
-    return datetime.utcnow().strftime(SNAP_FORMAT)
+def time_string(stamp=None):
+    if stamp is None:
+        stamp = datetime.utcnow()
+    return stamp.strftime(SNAP_FORMAT)

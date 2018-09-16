@@ -95,7 +95,13 @@ def arguments():
         help='textual unit value'
     )
 
-    return parser.parse_args()
+    args = parser.parse_args()
+    message('{} at "{}" time: "{}", unit: "{}", prefix: "{}"'.format(
+        __file__, time_string(),
+        args.time, args.unit, args.prefix
+    ), info=True, critical=False)
+
+    return args
 
 
 def consider(s_name, a_prefix, s_prefix, a_time, s_time):

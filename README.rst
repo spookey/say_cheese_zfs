@@ -22,6 +22,26 @@ Installation
 * Then symlink both scripts (as root) into a folder inside of ``$PATH``.
 
 
+Crontab
+^^^^^^^
+
+My crontab looks more or less like this::
+
+    # say cheese
+    3   0   *   *   *   /usr/local/bin/python /location/of/take_snapshots.py         auto_daily    >> /var/log/say_cheese.log 2>&1
+    13  0   *   *   *   /usr/local/bin/python /location/of/purge_snapshots.py 1 d -p auto_daily    >> /var/log/say_cheese.log 2>&1
+
+    5   0   *   *   0   /usr/local/bin/python /location/of/take_snapshots.py         auto_weekly   >> /var/log/say_cheese.log 2>&1
+    15  0   *   *   0   /usr/local/bin/python /location/of/purge_snapshots.py 1 w -p auto_weekly   >> /var/log/say_cheese.log 2>&1
+
+    7   0   1   *   *   /usr/local/bin/python /location/of/take_snapshots.py         auto_monthly  >> /var/log/say_cheese.log 2>&1
+    17  0   1   *   *   /usr/local/bin/python /location/of/purge_snapshots.py 1 m -p auto_monthly  >> /var/log/say_cheese.log 2>&1
+
+    9   0   1   1   *   /usr/local/bin/python /location/of/take_snapshots.py         auto_yearly   >> /var/log/say_cheese.log 2>&1
+    19  0   1   1   *   /usr/local/bin/python /location/of/purge_snapshots.py 1 y -p auto_yearly   >> /var/log/say_cheese.log 2>&1
+
+
+
 Scripts
 -------
 

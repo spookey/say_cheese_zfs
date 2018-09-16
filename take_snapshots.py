@@ -73,6 +73,12 @@ def arguments():
 
     if not args.exact:
         args.name = '{}_{}'.format(args.name, time_string())
+
+    message('{} at "{}" name: "{}", pools: "{}"'.format(
+        __file__, time_string(),
+        args.name, ', '.join(pools)
+    ), info=True, critical=False)
+
     return args
 
 

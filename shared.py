@@ -4,11 +4,11 @@ from sys import stderr, stdout
 
 from compat import is_iterable
 
-SNAP_FORMAT = '%Y-%m-%d_%H-%M-%S'
+SNAP_FORMAT = "%Y-%m-%d_%H-%M-%S"
 
 
 def message(entries, info=True, critical=False):
-    pipe, pre = (stdout, 'info') if info else (stderr, 'error')
+    pipe, pre = (stdout, "info") if info else (stderr, "error")
 
     if isinstance(entries, str):
         entries = entries.splitlines()
@@ -16,7 +16,7 @@ def message(entries, info=True, critical=False):
         entries = [entries]
 
     for entry in entries:
-        pipe.write('{}: {}\n'.format(pre, entry))
+        pipe.write("{}: {}\n".format(pre, entry))
     pipe.flush()
     if critical:
         _exit(1)

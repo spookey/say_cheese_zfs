@@ -9,7 +9,7 @@ from shared import message, time_string
 
 
 def pool_names():
-    cmd = 'zfs list -H -o name'
+    cmd = "zfs list -H -o name"
     try:
         proc = check_output(split(cmd), universal_newlines=True)
         return proc.splitlines()
@@ -35,26 +35,33 @@ def arg_parser():
     parser = ArgumentParser(__file__, add_help=True)
 
     parser.add_argument(
-        '-x', '--exact',
-        action='store_true', default=False,
-        help='do not append current date onto name of snapshot'
+        "-x",
+        "--exact",
+        action="store_true",
+        default=False,
+        help="do not append current date onto name of snapshot",
     )
     parser.add_argument(
-        '-d', '--dry',
-        action='store_true', default=False,
-        help='dry run - just print what would be done'
+        "-d",
+        "--dry",
+        action="store_true",
+        default=False,
+        help="dry run - just print what would be done",
     )
 
     parser.add_argument(
-        'name',
-        action='store',
-        help='name of snapshot'
-        '(will be suffixed with current date if not exact)'
+        "name",
+        action="store",
+        help=(
+            "name of snapshot"
+            " (will be suffixed with current date if not exact)"
+        ),
     )
     parser.add_argument(
-        'pools',
-        action='store', nargs='*',
-        help='name of pools'
+        "pools",
+        action="store",
+        nargs="*",
+        help="name of pools",
     )
 
     return parser
@@ -72,12 +79,18 @@ def arguments():
         args.pools = pools
 
     if not args.exact:
-        args.name = '{}_{}'.format(args.name, time_string())
+        args.name = "{}_{}".format(args.name, time_string())
 
-    message('{} at "{}" name: "{}", pools: "{}"'.format(
-        __file__, time_string(),
-        args.name, ', '.join(pools)
-    ), info=True, critical=False)
+    message(
+        '{} at "{}" name: "{}", pools: "{}"'.format(
+            __file__,
+            time_string(),
+            args.name,
+            ", ".join(pools),
+        ),
+        info=True,
+        critical=False,
+    )
 
     return args
 
@@ -86,12 +99,10 @@ def main():
     args = arguments()
     res = []
     for pool in args.pools:
-        res.append(
-            pool_snapshot(pool, args.name, dry=args.dry)
-        )
+        res.append(pool_snapshot(pool, args.name, dry=args.dry))
 
     return all(res)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     _exit(not main())

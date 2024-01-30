@@ -40,7 +40,7 @@ isort: $(CMD_ISORT)
 
 .PHONY: black
 black: $(CMD_BLACK)
-	$(CMD_BLACK) --line-length 79 --diff $(SOURCES)
+	$(CMD_BLACK) --line-length 79 $(SOURCES)
 
 .PHONY: action
 action: isort black

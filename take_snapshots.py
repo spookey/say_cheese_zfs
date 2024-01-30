@@ -32,7 +32,7 @@ def pool_snapshot(pool, name, dry=False):
     return False
 
 
-def arg_parser():
+def arguments():
     parser = ArgumentParser(__file__, add_help=True)
 
     parser.add_argument(
@@ -65,11 +65,6 @@ def arg_parser():
         help="name of pools",
     )
 
-    return parser
-
-
-def arguments():
-    parser = arg_parser()
     args = parser.parse_args()
 
     pools = pool_names()

@@ -15,6 +15,7 @@ def pool_names():
         return proc.splitlines()
     except (CalledProcessError, OSError) as ex:
         message([cmd, str(ex)], info=False, critical=True)
+    return []
 
 
 def pool_snapshot(pool, name, dry=False):

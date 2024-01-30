@@ -33,6 +33,7 @@ def snapshot_data():
             return proc.splitlines()
         except (CalledProcessError, OSError) as ex:
             message([cmd, str(ex)], info=False, critical=True)
+        return []
 
     result = []
     for snap in _get():

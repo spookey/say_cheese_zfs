@@ -20,7 +20,7 @@ UNITS = (
 
 def unit(num, key):
     for val, sml, lng in UNITS:
-        if key == sml or key == lng:
+        if key in (sml, lng):
             return val * num
     return 0
 

@@ -6,7 +6,7 @@ Automatically take and/or purge ZFS snapshots.
 
 This code is intended to be run inside the crontab.
 
-It should work both in python 2 and python 3.
+It works on the latest stable python 3 version on FreeBSD.
 (If it does not, or on other errors, please feel free to open an issue.)
 
 ### Installation
@@ -44,7 +44,7 @@ Take snapshots.
 Please see `./take_snapshots.py --help` for usage:
 
 ```sh
-./take_snapshots.py [-h] [-x] [-d] name [pools [pools ...]]
+./take_snapshots.py [-h] [-x] [-d] name [pools ...]
 ```
 
 ### Purge
@@ -54,9 +54,8 @@ Purge snapshots.
 Please see `./purge_snapshots.py --help` for usage:
 
 ```sh
-./purge_snapshots.py  [-h] [-d] [-p PREFIX]
-                        time
-                        {S,sec,M,min,H,hour,d,day,w,week,m,month,y,year}
+./purge_snapshots.py [-h] [-d] [-p PREFIX]
+  time {S,sec,M,min,H,hour,d,day,w,week,m,month,y,year}
 ```
 
 ## Appendix

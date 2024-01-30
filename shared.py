@@ -1,8 +1,7 @@
+from collections.abc import Iterable
 from datetime import datetime
 from sys import exit as _exit
 from sys import stderr, stdout
-
-from compat import is_iterable
 
 SNAP_FORMAT = "%Y-%m-%d_%H-%M-%S"
 
@@ -12,7 +11,7 @@ def message(entries, info=True, critical=False):
 
     if isinstance(entries, str):
         entries = entries.splitlines()
-    if not is_iterable(entries):
+    if not isinstance(entries, Iterable):
         entries = [entries]
 
     for entry in entries:

@@ -3,6 +3,7 @@ DIR_VENV	:=	venv
 CMD_PIP		:=	$(DIR_VENV)/bin/pip3
 CMD_ISORT	:=	$(DIR_VENV)/bin/isort
 CMD_BLACK	:=	$(DIR_VENV)/bin/black
+CMD_PYLINT	:=	$(DIR_VENV)/bin/pylint
 
 SOURCES		=	$(wildcard *.py)
 
@@ -15,6 +16,7 @@ help:
 	@echo
 	@echo "isort        run isort"
 	@echo "black        run black"
+	@echo "pylint       run pylint"
 	@echo
 	@echo "action       run all"
 	@echo
@@ -34,6 +36,9 @@ $(CMD_ISORT): $(DIR_VENV)
 $(CMD_BLACK): $(DIR_VENV)
 	$(CMD_PIP) install -U "black"
 
+$(CMD_PYLINT): $(DIR_VENV)
+	$(CMD_PIP) install -U "pylint"
+
 .PHONY: isort
 isort: $(CMD_ISORT)
 	$(CMD_ISORT) --profile black $(SOURCES)
@@ -42,5 +47,9 @@ isort: $(CMD_ISORT)
 black: $(CMD_BLACK)
 	$(CMD_BLACK) --line-length 79 $(SOURCES)
 
+.PHONY: pylint
+pylint: $(CMD_PYLINT)
+	$(CMD_PYLINT) -d C0114,C0115,C0116 --output-format colorized $(SOURCES)
+
 .PHONY: action
-action: isort black
+action: isort black pylint

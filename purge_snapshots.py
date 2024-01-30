@@ -5,8 +5,7 @@ from shlex import split
 from subprocess import CalledProcessError, check_call, check_output
 from sys import exit as _exit
 
-from shared import message, time_string, time_parse, time_span
-
+from shared import message, time_parse, time_span, time_string
 
 UNITS = (
     (1, 'S', 'sec'),

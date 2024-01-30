@@ -36,7 +36,7 @@ $(CMD_BLACK): $(DIR_VENV)
 
 .PHONY: isort
 isort: $(CMD_ISORT)
-	$(CMD_ISORT) --profile black --diff $(SOURCES)
+	$(CMD_ISORT) --profile black $(SOURCES)
 
 .PHONY: black
 black: $(CMD_BLACK)

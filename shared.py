@@ -1,6 +1,6 @@
 from datetime import datetime
-from sys import stderr, stdout
 from sys import exit as _exit
+from sys import stderr, stdout
 
 from compat import is_iterable
 

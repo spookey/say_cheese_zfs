@@ -97,9 +97,11 @@ def arguments():
     )
 
     args = parser.parse_args()
+    stamp = time_string()
+
     message(
         (
-            f'{__file__} at "{time_string()}"'
+            f'{__file__} at "{stamp}"'
             f' time: "{args.time}",'
             f' unit: "{args.unit}",'
             f' prefix: "{args.prefix}"'

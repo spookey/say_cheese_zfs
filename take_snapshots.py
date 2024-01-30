@@ -66,6 +66,7 @@ def arguments():
     )
 
     args = parser.parse_args()
+    stamp = time_string()
 
     pools = pool_names()
     for pool in args.pools:
@@ -75,11 +76,11 @@ def arguments():
         args.pools = pools
 
     if not args.exact:
-        args.name = f"{args.name}_{time_string()}"
+        args.name = f"{args.name}_{stamp}"
 
     message(
         (
-            f'{__file__} at "{time_string()}"'
+            f'{__file__} at "{stamp}"'
             f' name: "{args.name}",'
             f' pools: "{", ".join(pools)}"'
         ),

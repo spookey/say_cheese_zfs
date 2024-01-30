@@ -18,7 +18,7 @@ def pool_names():
 
 
 def pool_snapshot(pool, name, dry=False):
-    cmd = 'zfs snapshot "{}@{}"'.format(pool, name)
+    cmd = f'zfs snapshot "{pool}@{name}"'
     message(cmd, info=True, critical=False)
     if dry:
         return True
@@ -74,19 +74,18 @@ def arguments():
     pools = pool_names()
     for pool in args.pools:
         if pool not in pools:
-            parser.error('pool "{}" does not exist'.format(pool))
+            parser.error(f'pool "{pool}" does not exist')
     if not args.pools:
         args.pools = pools
 
     if not args.exact:
-        args.name = "{}_{}".format(args.name, time_string())
+        args.name = f"{args.name}_{time_string()}"
 
     message(
-        '{} at "{}" name: "{}", pools: "{}"'.format(
-            __file__,
-            time_string(),
-            args.name,
-            ", ".join(pools),
+        (
+            f'{__file__} at "{time_string()}"'
+            f' name: "{args.name}",'
+            f' pools: "{", ".join(pools)}"'
         ),
         info=True,
         critical=False,

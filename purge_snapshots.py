@@ -43,7 +43,7 @@ def snapshot_data():
 
 
 def snapshot_destroy(name, dry=False):
-    cmd = 'zfs destroy "{}"'.format(name)
+    cmd = f'zfs destroy "{name}"'
     message(cmd, info=True, critical=False)
     if dry:
         return True
@@ -65,7 +65,7 @@ def arguments():
             if value <= 0:
                 raise ValueError()
         except ValueError:
-            parser.error('"{}" should be a positive number'.format(value))
+            parser.error(f'"{value}" should be a positive number')
         return value
 
     parser.add_argument(
@@ -97,12 +97,11 @@ def arguments():
 
     args = parser.parse_args()
     message(
-        '{} at "{}" time: "{}", unit: "{}", prefix: "{}"'.format(
-            __file__,
-            time_string(),
-            args.time,
-            args.unit,
-            args.prefix,
+        (
+            f'{__file__} at "{time_string()}"'
+            f' time: "{args.time}",'
+            f' unit: "{args.unit}",'
+            f' prefix: "{args.prefix}"'
         ),
         info=True,
         critical=False,
@@ -114,10 +113,9 @@ def arguments():
 def consider(s_name, a_prefix, s_prefix, a_time, s_time):
     if a_prefix is not None and not s_prefix.startswith(a_prefix):
         message(
-            '"{}" does not match on "{}" - skipping "{}"'.format(
-                a_prefix,
-                s_prefix,
-                s_name,
+            (
+                f'"{a_prefix}" does not match on "{s_prefix}"'
+                f' - skipping "{s_name}"'
             ),
             info=True,
             critical=False,
@@ -125,11 +123,12 @@ def consider(s_name, a_prefix, s_prefix, a_time, s_time):
         return False
 
     if s_time > a_time:
+        a_span = time_string(time_parse(a_time))
+        s_span = time_string(time_parse(s_time))
         message(
-            '"{}" is smaller than "{}" - skipping "{}"'.format(
-                time_string(time_parse(a_time)),
-                time_string(time_parse(s_time)),
-                s_name,
+            (
+                f'"{a_span}" is smaller than "{s_span}"'
+                f'- skipping "{s_name}"'
             ),
             info=True,
             critical=False,

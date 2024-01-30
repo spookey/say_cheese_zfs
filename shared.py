@@ -15,7 +15,7 @@ def message(entries, info=True, critical=False):
         entries = [entries]
 
     for entry in entries:
-        pipe.write("{}: {}\n".format(pre, entry))
+        pipe.write(f"{pre}: {entry}\n")
     pipe.flush()
     if critical:
         _exit(1)

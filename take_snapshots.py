@@ -14,7 +14,7 @@ def pool_names():
     cmd = "zfs list -H -o name"
     LOG.debug("running [%s]", cmd)
     try:
-        proc = check_output(split(cmd), universal_newlines=True)
+        proc = check_output(split(cmd), text=True)
         return proc.splitlines()
     except (CalledProcessError, OSError) as ex:
         LOG.error("command failed: [%s] - %s", cmd, ex)

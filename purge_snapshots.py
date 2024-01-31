@@ -37,7 +37,7 @@ def snapshot_data():
         cmd = "zfs list -H -p -o creation,name -t snapshot"
         LOG.debug("running [%s]", cmd)
         try:
-            proc = check_output(split(cmd), universal_newlines=True)
+            proc = check_output(split(cmd), text=True)
             return proc.splitlines()
         except (CalledProcessError, OSError) as ex:
             LOG.error("command failed: [%s] - %s", cmd, ex)

@@ -1,10 +1,34 @@
 from argparse import ArgumentParser
 from collections.abc import Iterable
 from datetime import datetime
+from logging import (
+    DEBUG,
+    ERROR,
+    INFO,
+    WARNING,
+    Formatter,
+    StreamHandler,
+    getLogger,
+)
 from sys import exit as _exit
 from sys import stderr, stdout
 
+LOG = getLogger(__name__)
 SNAP_FORMAT = "%Y-%m-%d_%H-%M-%S"
+LOG_FORMATTER = Formatter(
+    """
+-- %(asctime)s\t%(levelname)s\t[%(module)s:%(lineno)s] --
+%(message)s
+    """.strip()
+)
+LOG_LEVEL_DEFAULT = "info"
+LOG_LEVELS = {
+    "debug": DEBUG,
+    "error": ERROR,
+    LOG_LEVEL_DEFAULT: INFO,
+    "warn": WARNING,
+    "warning": WARNING,
+}
 
 
 def start_parser(name):
@@ -19,6 +43,16 @@ def start_parser(name):
     )
 
     return parser
+
+
+def setup_logging(level_name):
+    handler = StreamHandler(stream=None)
+    handler.setFormatter(LOG_FORMATTER)
+    level = LOG_LEVELS.get(level_name, INFO)
+
+    logger = getLogger()
+    logger.addHandler(handler)
+    logger.setLevel(level)
 
 
 def message(entries, info=True):

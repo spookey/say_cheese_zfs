@@ -1,11 +1,13 @@
 #!/usr/bin/env python3
 
+from logging import getLogger
 from shlex import split
 from subprocess import CalledProcessError, check_call, check_output
 from sys import exit as _exit
 
 from shared import message, start_parser, time_parse, time_span, time_string
 
+LOG = getLogger(__name__)
 UNITS = (
     (1, "S", "sec"),
     (60, "M", "min"),

@@ -5,7 +5,13 @@ from shlex import split
 from subprocess import CalledProcessError, check_call, check_output
 from sys import exit as _exit
 
-from shared import message, start_parser, time_parse, time_span, time_string
+from shared import (
+    setup_logging,
+    start_parser,
+    time_parse,
+    time_span,
+    time_string,
+)
 
 LOG = getLogger(__name__)
 UNITS = (
@@ -29,11 +35,12 @@ def unit(num, key):
 def snapshot_data():
     def _get():
         cmd = "zfs list -H -p -o creation,name -t snapshot"
+        LOG.debug("running [%s]", cmd)
         try:
             proc = check_output(split(cmd), universal_newlines=True)
             return proc.splitlines()
         except (CalledProcessError, OSError) as ex:
-            message([cmd, str(ex)], info=False)
+            LOG.error("command failed: [%s] - %s", cmd, ex)
             _exit(1)
 
     result = []
@@ -46,15 +53,15 @@ def snapshot_data():
 
 def snapshot_destroy(name, dry=False):
     cmd = f'zfs destroy "{name}"'
-    message(cmd, info=True)
     if dry:
         return True
 
+    LOG.debug("running [%s]", cmd)
     try:
         check_call(split(cmd))
         return True
     except (CalledProcessError, OSError) as ex:
-        message([cmd, str(ex)], info=False)
+        LOG.error("command failed: [%s] - %s", cmd, ex)
         _exit(1)
 
 
@@ -67,7 +74,7 @@ def arguments():
             if value <= 0:
                 raise ValueError()
         except ValueError:
-            parser.error(f'"{value}" should be a positive number')
+            parser.error(f"[{value}] should be a positive number")
         return value
 
     def units():
@@ -95,16 +102,10 @@ def arguments():
     )
 
     args = parser.parse_args()
-    stamp = time_string()
+    setup_logging(args.level)
 
-    message(
-        (
-            f'{__file__} at "{stamp}"'
-            f' time: "{args.time}",'
-            f' unit: "{args.unit}",'
-            f' prefix: "{args.prefix}"'
-        ),
-        info=True,
+    LOG.info(
+        "time [%s] unit [%s] prefix [%s]", args.time, args.unit, args.prefix
     )
 
     return args
@@ -112,24 +113,22 @@ def arguments():
 
 def consider(s_name, a_prefix, s_prefix, a_time, s_time):
     if a_prefix is not None and not s_prefix.startswith(a_prefix):
-        message(
-            (
-                f'"{a_prefix}" does not match on "{s_prefix}"'
-                f' - skipping "{s_name}"'
-            ),
-            info=True,
+        LOG.debug(
+            "[%s] does not match on [%s] - skipping [%s]",
+            a_prefix,
+            s_prefix,
+            s_name,
         )
         return False
 
     if s_time > a_time:
-        a_span = time_string(time_parse(a_time))
-        s_span = time_string(time_parse(s_time))
-        message(
-            (
-                f'"{a_span}" is smaller than "{s_span}"'
-                f'- skipping "{s_name}"'
-            ),
-            info=True,
+        a_stamp = time_string(time_parse(a_time))
+        s_stamp = time_string(time_parse(s_time))
+        LOG.debug(
+            "[%s] is smaller than [%s] - skipping [%s]",
+            a_stamp,
+            s_stamp,
+            s_name,
         )
         return False
 

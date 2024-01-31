@@ -5,32 +5,33 @@ from shlex import split
 from subprocess import CalledProcessError, check_call, check_output
 from sys import exit as _exit
 
-from shared import message, start_parser, time_string
+from shared import setup_logging, start_parser, time_string
 
 LOG = getLogger(__name__)
 
 
 def pool_names():
     cmd = "zfs list -H -o name"
+    LOG.debug("running [%s]", cmd)
     try:
         proc = check_output(split(cmd), universal_newlines=True)
         return proc.splitlines()
     except (CalledProcessError, OSError) as ex:
-        message([cmd, str(ex)], info=False)
+        LOG.error("command failed: [%s] - %s", cmd, ex)
         _exit(1)
 
 
 def pool_snapshot(pool, name, dry=False):
     cmd = f'zfs snapshot "{pool}@{name}"'
-    message(cmd, info=True)
     if dry:
         return True
 
+    LOG.debug("running [%s]", cmd)
     try:
         check_call(split(cmd))
         return True
     except (CalledProcessError, OSError) as ex:
-        message([cmd, str(ex)], info=False)
+        LOG.error("command failed: [%s] - %s", cmd, ex)
     return False
 
 
@@ -60,7 +61,7 @@ def arguments():
     )
 
     args = parser.parse_args()
-    stamp = time_string()
+    setup_logging(args.level)
 
     pools = pool_names()
     for pool in args.pools:
@@ -70,16 +71,10 @@ def arguments():
         args.pools = pools
 
     if not args.exact:
+        stamp = time_string()
         args.name = f"{args.name}_{stamp}"
 
-    message(
-        (
-            f'{__file__} at "{stamp}"'
-            f' name: "{args.name}",'
-            f' pools: "{", ".join(pools)}"'
-        ),
-        info=True,
-    )
+    LOG.info("name [%s] pools [%s]", args.name, args.pools)
 
     return args
 

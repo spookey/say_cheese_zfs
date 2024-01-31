@@ -44,7 +44,7 @@ Take snapshots.
 Please see `./take_snapshots.py --help` for usage:
 
 ```sh
-./take_snapshots.py [-h] [-x] [-d] name [pools ...]
+take_snapshots [-h] [-d] [-x] name [pools ...]
 ```
 
 ### Purge
@@ -54,7 +54,7 @@ Purge snapshots.
 Please see `./purge_snapshots.py --help` for usage:
 
 ```sh
-./purge_snapshots.py [-h] [-d] [-p PREFIX]
+purge_snapshots [-h] [-d] [-p PREFIX]
   time {S,sec,M,min,H,hour,d,day,w,week,m,month,y,year}
 ```
 

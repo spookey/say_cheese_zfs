@@ -1,11 +1,10 @@
 #!/usr/bin/env python3
 
-from argparse import ArgumentParser
 from shlex import split
 from subprocess import CalledProcessError, check_call, check_output
 from sys import exit as _exit
 
-from shared import message, time_parse, time_span, time_string
+from shared import message, start_parser, time_parse, time_span, time_string
 
 UNITS = (
     (1, "S", "sec"),
@@ -58,7 +57,7 @@ def snapshot_destroy(name, dry=False):
 
 
 def arguments():
-    parser = ArgumentParser(__file__, add_help=True)
+    parser = start_parser("purge_snapshots")
 
     def positive(value):
         try:
@@ -75,19 +74,11 @@ def arguments():
             yield lng
 
     parser.add_argument(
-        "-d",
-        "--dry",
-        action="store_true",
-        default=False,
-        help="dry run - just print what would be done",
-    )
-    parser.add_argument(
         "-p",
         "--prefix",
         action="store",
         help="snapshot prefix string to match",
     )
-
     parser.add_argument(
         "time",
         type=positive,

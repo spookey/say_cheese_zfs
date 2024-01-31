@@ -1,11 +1,10 @@
 #!/usr/bin/env python3
 
-from argparse import ArgumentParser
 from shlex import split
 from subprocess import CalledProcessError, check_call, check_output
 from sys import exit as _exit
 
-from shared import message, time_string
+from shared import message, start_parser, time_string
 
 
 def pool_names():
@@ -33,7 +32,7 @@ def pool_snapshot(pool, name, dry=False):
 
 
 def arguments():
-    parser = ArgumentParser(__file__, add_help=True)
+    parser = start_parser("take_snapshots")
 
     parser.add_argument(
         "-x",
@@ -42,14 +41,6 @@ def arguments():
         default=False,
         help="do not append current date onto name of snapshot",
     )
-    parser.add_argument(
-        "-d",
-        "--dry",
-        action="store_true",
-        default=False,
-        help="dry run - just print what would be done",
-    )
-
     parser.add_argument(
         "name",
         action="store",

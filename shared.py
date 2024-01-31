@@ -1,9 +1,24 @@
+from argparse import ArgumentParser
 from collections.abc import Iterable
 from datetime import datetime
 from sys import exit as _exit
 from sys import stderr, stdout
 
 SNAP_FORMAT = "%Y-%m-%d_%H-%M-%S"
+
+
+def start_parser(name):
+    parser = ArgumentParser(name, add_help=True)
+
+    parser.add_argument(
+        "-d",
+        "--dry",
+        action="store_true",
+        default=False,
+        help="dry run - just print what would be done",
+    )
+
+    return parser
 
 
 def message(entries, info=True, critical=False):

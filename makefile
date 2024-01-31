@@ -41,7 +41,7 @@ $(CMD_PYLINT): $(DIR_VENV)
 
 .PHONY: isort
 isort: $(CMD_ISORT)
-	$(CMD_ISORT) --profile black $(SOURCES)
+	$(CMD_ISORT) --profile black --line-length 79 $(SOURCES)
 
 .PHONY: black
 black: $(CMD_BLACK)

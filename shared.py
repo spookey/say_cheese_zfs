@@ -9,6 +9,9 @@ from logging import (
     StreamHandler,
     getLogger,
 )
+from shlex import split
+from subprocess import CalledProcessError, check_call, check_output
+from sys import exit as _exit
 
 LOG = getLogger(__name__)
 SNAP_FORMAT = "%Y-%m-%d_%H-%M-%S"
@@ -57,6 +60,30 @@ def setup_logging(level_name):
     logger = getLogger()
     logger.addHandler(handler)
     logger.setLevel(level)
+
+
+def run_output(cmd, *, bailout=True):
+    LOG.debug("running [%s]", cmd)
+    try:
+        proc = check_output(split(cmd), text=True)
+        return proc.splitlines()
+    except (CalledProcessError, OSError) as ex:
+        LOG.error("command failed: [%s] - %s", cmd, ex)
+        if bailout:
+            _exit(1)
+    return []
+
+
+def run_result(cmd, *, bailout=True):
+    LOG.debug("running [%s]", cmd)
+    try:
+        check_call(split(cmd))
+        return True
+    except (CalledProcessError, OSError) as ex:
+        LOG.error("command failed: [%s] - %s", cmd, ex)
+        if bailout:
+            _exit(1)
+    return False
 
 
 def time_string(stamp=None):

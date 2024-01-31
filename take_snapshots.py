@@ -1,24 +1,22 @@
 #!/usr/bin/env python3
 
 from logging import getLogger
-from shlex import split
-from subprocess import CalledProcessError, check_call, check_output
 from sys import exit as _exit
 
-from shared import setup_logging, start_parser, time_string
+from shared import (
+    run_output,
+    run_result,
+    setup_logging,
+    start_parser,
+    time_string,
+)
 
 LOG = getLogger(__name__)
 
 
 def pool_names():
     cmd = "zfs list -H -o name"
-    LOG.debug("running [%s]", cmd)
-    try:
-        proc = check_output(split(cmd), text=True)
-        return proc.splitlines()
-    except (CalledProcessError, OSError) as ex:
-        LOG.error("command failed: [%s] - %s", cmd, ex)
-        _exit(1)
+    return run_output(cmd, bailout=True)
 
 
 def pool_snapshot(pool, name, dry=False):
@@ -26,13 +24,7 @@ def pool_snapshot(pool, name, dry=False):
     if dry:
         return True
 
-    LOG.debug("running [%s]", cmd)
-    try:
-        check_call(split(cmd))
-        return True
-    except (CalledProcessError, OSError) as ex:
-        LOG.error("command failed: [%s] - %s", cmd, ex)
-    return False
+    return run_result(cmd, bailout=False)
 
 
 def arguments():

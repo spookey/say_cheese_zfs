@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
 
 from logging import getLogger
-from shlex import split
-from subprocess import CalledProcessError, check_call, check_output
 from sys import exit as _exit
 
 from shared import (
+    run_output,
+    run_result,
     setup_logging,
     start_parser,
     time_parse,
@@ -35,13 +35,7 @@ def unit(num, key):
 def snapshot_data():
     def _get():
         cmd = "zfs list -H -p -o creation,name -t snapshot"
-        LOG.debug("running [%s]", cmd)
-        try:
-            proc = check_output(split(cmd), text=True)
-            return proc.splitlines()
-        except (CalledProcessError, OSError) as ex:
-            LOG.error("command failed: [%s] - %s", cmd, ex)
-            _exit(1)
+        return run_output(cmd, bailout=True)
 
     result = []
     for snap in _get():
@@ -56,13 +50,7 @@ def snapshot_destroy(name, dry=False):
     if dry:
         return True
 
-    LOG.debug("running [%s]", cmd)
-    try:
-        check_call(split(cmd))
-        return True
-    except (CalledProcessError, OSError) as ex:
-        LOG.error("command failed: [%s] - %s", cmd, ex)
-        _exit(1)
+    return run_result(cmd, bailout=True)
 
 
 def arguments():

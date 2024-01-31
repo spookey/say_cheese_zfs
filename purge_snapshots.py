@@ -31,8 +31,8 @@ def snapshot_data():
             proc = check_output(split(cmd), universal_newlines=True)
             return proc.splitlines()
         except (CalledProcessError, OSError) as ex:
-            message([cmd, str(ex)], info=False, critical=True)
-        return []
+            message([cmd, str(ex)], info=False)
+            _exit(1)
 
     result = []
     for snap in _get():
@@ -44,7 +44,7 @@ def snapshot_data():
 
 def snapshot_destroy(name, dry=False):
     cmd = f'zfs destroy "{name}"'
-    message(cmd, info=True, critical=False)
+    message(cmd, info=True)
     if dry:
         return True
 
@@ -52,8 +52,8 @@ def snapshot_destroy(name, dry=False):
         check_call(split(cmd))
         return True
     except (CalledProcessError, OSError) as ex:
-        message([cmd, str(ex)], info=False, critical=True)
-    return False
+        message([cmd, str(ex)], info=False)
+        _exit(1)
 
 
 def arguments():
@@ -103,7 +103,6 @@ def arguments():
             f' prefix: "{args.prefix}"'
         ),
         info=True,
-        critical=False,
     )
 
     return args
@@ -117,7 +116,6 @@ def consider(s_name, a_prefix, s_prefix, a_time, s_time):
                 f' - skipping "{s_name}"'
             ),
             info=True,
-            critical=False,
         )
         return False
 
@@ -130,7 +128,6 @@ def consider(s_name, a_prefix, s_prefix, a_time, s_time):
                 f'- skipping "{s_name}"'
             ),
             info=True,
-            critical=False,
         )
         return False
 

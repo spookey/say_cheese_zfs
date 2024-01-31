@@ -21,7 +21,7 @@ def start_parser(name):
     return parser
 
 
-def message(entries, info=True, critical=False):
+def message(entries, info=True):
     pipe, pre = (stdout, "info") if info else (stderr, "error")
 
     if isinstance(entries, str):
@@ -32,8 +32,6 @@ def message(entries, info=True, critical=False):
     for entry in entries:
         pipe.write(f"{pre}: {entry}\n")
     pipe.flush()
-    if critical:
-        _exit(1)
 
 
 def time_string(stamp=None):

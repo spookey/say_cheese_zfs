@@ -13,13 +13,13 @@ def pool_names():
         proc = check_output(split(cmd), universal_newlines=True)
         return proc.splitlines()
     except (CalledProcessError, OSError) as ex:
-        message([cmd, str(ex)], info=False, critical=True)
-    return []
+        message([cmd, str(ex)], info=False)
+        _exit(1)
 
 
 def pool_snapshot(pool, name, dry=False):
     cmd = f'zfs snapshot "{pool}@{name}"'
-    message(cmd, info=True, critical=False)
+    message(cmd, info=True)
     if dry:
         return True
 
@@ -76,7 +76,6 @@ def arguments():
             f' pools: "{", ".join(pools)}"'
         ),
         info=True,
-        critical=False,
     )
 
     return args

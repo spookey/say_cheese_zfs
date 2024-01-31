@@ -69,6 +69,11 @@ def arguments():
             parser.error(f'"{value}" should be a positive number')
         return value
 
+    def units():
+        for _, sml, lng in UNITS:
+            yield sml
+            yield lng
+
     parser.add_argument(
         "-d",
         "--dry",
@@ -92,7 +97,7 @@ def arguments():
     parser.add_argument(
         "unit",
         action="store",
-        choices=[fl for at in ((un[1], un[2]) for un in UNITS) for fl in at],
+        choices=list(units()),
         help="textual unit value",
     )
 

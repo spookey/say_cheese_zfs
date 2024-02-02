@@ -66,18 +66,22 @@ def arguments():
         stamp = time_string()
         args.name = f"{args.name}_{stamp}"
 
-    LOG.info("name [%s] pools [%s]", args.name, args.pools)
+    LOG.info(
+        "name [%s] pools [%s]",
+        args.name,
+        args.pools,
+    )
 
     return args
 
 
 def main():
     args = arguments()
-    res = []
+    result = []
     for pool in args.pools:
-        res.append(pool_snapshot(pool, args.name, dry=args.dry))
+        result.append(pool_snapshot(pool, args.name, dry=args.dry))
 
-    return all(res)
+    return all(result)
 
 
 if __name__ == "__main__":

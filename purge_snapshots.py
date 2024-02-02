@@ -33,12 +33,10 @@ def unit(num, key):
 
 
 def snapshot_data():
-    def _get():
-        cmd = "zfs list -H -p -o creation,name -t snapshot"
-        return run_output(cmd, bailout=True)
+    cmd = "zfs list -H -p -o creation,name -t snapshot"
 
     result = []
-    for snap in _get():
+    for snap in run_output(cmd, bailout=True):
         stamp, full_name = snap.split()
         _, prefix = full_name.split("@")
         result.append((int(stamp), full_name, prefix))
@@ -93,7 +91,10 @@ def arguments():
     setup_logging(args.level)
 
     LOG.info(
-        "time [%s] unit [%s] prefix [%s]", args.time, args.unit, args.prefix
+        "time [%s] unit [%s] prefix [%s]",
+        args.time,
+        args.unit,
+        args.prefix,
     )
 
     return args
@@ -126,13 +127,13 @@ def consider(s_name, a_prefix, s_prefix, a_time, s_time):
 def main():
     args = arguments()
     span = time_span() - unit(args.time, args.unit)
-    res = []
+    result = []
 
     for stamp, name, prefix in snapshot_data():
         if consider(name, args.prefix, prefix, span, stamp):
-            res.append(snapshot_destroy(name, dry=args.dry))
+            result.append(snapshot_destroy(name, dry=args.dry))
 
-    return all(res)
+    return all(result)
 
 
 if __name__ == "__main__":

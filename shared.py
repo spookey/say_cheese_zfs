@@ -99,4 +99,4 @@ def time_parse(number=0):
 def time_span(stamp=None):
     if stamp is None:
         stamp = datetime.utcnow()
-    return int((stamp - time_parse()).total_seconds())
+    return int((stamp - time_parse(0)).total_seconds())

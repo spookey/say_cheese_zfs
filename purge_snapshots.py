@@ -38,8 +38,8 @@ def snapshot_data():
     result = []
     for snap in run_output(cmd, bailout=True):
         stamp, full_name = snap.split()
-        _, prefix = full_name.split("@")
-        result.append((int(stamp), full_name, prefix))
+        _, suffix = full_name.split("@")
+        result.append((int(stamp), full_name, suffix))
     return result
 
 
@@ -100,24 +100,24 @@ def arguments():
     return args
 
 
-def consider(s_name, a_prefix, s_prefix, a_time, s_time):
-    if a_prefix is not None and not s_prefix.startswith(a_prefix):
+def consider(full_name, prefix, suffix, span_time, snap_time):
+    if prefix is not None and not suffix.startswith(prefix):
         LOG.debug(
             "[%s] does not match on [%s] - skipping [%s]",
-            a_prefix,
-            s_prefix,
-            s_name,
+            prefix,
+            suffix,
+            full_name,
         )
         return False
 
-    if s_time > a_time:
-        a_stamp = time_string(time_parse(a_time))
-        s_stamp = time_string(time_parse(s_time))
+    if snap_time > span_time:
+        span_stamp = time_string(time_parse(span_time))
+        snap_stamp = time_string(time_parse(snap_time))
         LOG.debug(
             "[%s] is smaller than [%s] - skipping [%s]",
-            a_stamp,
-            s_stamp,
-            s_name,
+            span_stamp,
+            snap_stamp,
+            full_name,
         )
         return False
 
@@ -126,12 +126,12 @@ def consider(s_name, a_prefix, s_prefix, a_time, s_time):
 
 def main():
     args = arguments()
-    span = time_span() - unit(args.time, args.unit)
+    span_time = time_span() - unit(args.time, args.unit)
     result = []
 
-    for stamp, name, prefix in snapshot_data():
-        if consider(name, args.prefix, prefix, span, stamp):
-            result.append(snapshot_destroy(name, dry=args.dry))
+    for snap_time, full_name, suffix in snapshot_data():
+        if consider(full_name, args.prefix, suffix, span_time, snap_time):
+            result.append(snapshot_destroy(full_name, dry=args.dry))
 
     return all(result)
 

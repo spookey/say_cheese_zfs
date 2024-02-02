@@ -48,6 +48,7 @@ def snapshot_destroy(name, dry=False):
     if dry:
         return True
 
+    LOG.info("destroy snapshot [%s]", name)
     return run_result(cmd, bailout=True)
 
 

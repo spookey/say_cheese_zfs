@@ -24,6 +24,7 @@ def pool_snapshot(pool, name, dry=False):
     if dry:
         return True
 
+    LOG.info("create snapshot [%s] [%s]", pool, name)
     return run_result(cmd, bailout=False)
 
 

@@ -35,6 +35,17 @@ My crontab looks more or less like this:
 19  0   1   1   *   /usr/local/bin/python /location/of/purge_snapshots.py  2 y -p auto_yearly   >> /var/log/say_cheese.log 2>&1
 ```
 
+#### Logrotate
+
+To rotate the logfiles I use `newsyslog`.
+
+`/usr/local/etc/newsyslog.conf.d/say_cheese.conf`:
+
+```sh
+# logfilename          [owner:group]    mode count size when  flags
+/var/log/say_cheese.log                 644  9     1000 *     BCNX
+```
+
 ## Scripts
 
 ### Take
